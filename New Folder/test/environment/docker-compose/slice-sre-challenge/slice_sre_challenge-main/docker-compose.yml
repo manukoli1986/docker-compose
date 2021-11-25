@@ -13,3 +13,21 @@ services:
   app:
     build: ./app
 
+
+  sidecar:
+    hostname: nginx
+    image: gonitro/sidecar:latest
+    cap_add:
+      - NET_ADMIN
+    labels:
+      SidecarDiscover: "true"
+    environment:
+      - SIDECAR_LOGGING_LEVEL=debug
+      - SIDECAR_SEEDS=127.0.0.1
+      - SIDECAR_CLUSTER_NAME=development
+      - "SIDECAR_DISCOVERY=docker static"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 10000-10050:10000-10050
+      - 1777:7777
